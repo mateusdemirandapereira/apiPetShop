@@ -21,6 +21,32 @@ class Fornecedor {
         this.dataAtualizacao = result.dataAtualizacao;
         this.versao = result.versao;
     }
+    async carregar () {
+        const encontrado = await TabelaFornecedor.pegaPorId(this.id);
+        this.empresa = encontrado.empresa;
+        this.email = encontrado.email;
+        this.categoria = encontrado.categoria;
+        this.dataCriacao = encontrado.dataCriacao;
+        this.dataAtualizacao = encontrado.dataAtualizacao;
+        this.versao = encontrado.versao;
+   
+    }
+   async  atualizar(){
+            await TabelaFornecedor.pegaPorId(this.id);
+            const campos = ["empresa","email","categoria"];
+            const dadosParaAtualizar = {};
+            campos.forEach(campo=>{
+                const valor = this[campo];
+                if (typeof valor == "string" && valor.length > 0){
+                    dadosParaAtualizar[campo] = valor; 
+                }
+            });
+            if (Object.keys(dadosParaAtualizar).length === 0){
+                    throw new Error("Não foram fornecidos dados para atualizar");
+            }else{
+                 await  TabelaFornecedor.atualizar(this.id,dadosParaAtualizar); 
+            }
+    }
 }
 
 
