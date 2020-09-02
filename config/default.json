@@ -1,0 +1,13 @@
+{
+    "postgres":{
+        "db":{
+            "userName":"postgres",
+            "host":"localhost",
+            "password":"root",
+            "dbName":"petshop"
+        }
+    },
+    "api":{
+        "porta":3000
+    }
+}
