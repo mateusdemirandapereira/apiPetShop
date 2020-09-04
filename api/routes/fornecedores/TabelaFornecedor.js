@@ -1,5 +1,5 @@
 const Modelo = require("./ModeloTabelaFornecedor");
-
+const NaoEncontrado = require("../../erros/NaoEncontrado");
 class TabelaFornecedor {
 
     static async listar() {
@@ -13,7 +13,7 @@ class TabelaFornecedor {
         const encontrado = await Modelo.findOne({ where: { id } });
 
         if (!encontrado) {
-            throw new Error("Fornecedor não encontrado");
+            throw new NaoEncontrado();
         } else {
             return encontrado;
         }

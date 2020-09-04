@@ -10,7 +10,7 @@ router.get("/", async (req, res) => {
     );
 });
 
-router.post("/", async (req, res) => {
+router.post("/", async (req, res,next) => {
     try {
 
         const dados = req.body;
@@ -21,15 +21,12 @@ router.post("/", async (req, res) => {
             JSON.stringify(fornecedor)
         );
     } catch (erro) {
-        res.status(400);
-        return res.send(
-            JSON.stringify({ mensagem: erro.message })
-        );
+        return next(erro);
     }
 
 });
 
-router.get("/:idFornecedor", async (req, res) => {
+router.get("/:idFornecedor", async (req, res,next) => {
     try {
         const { idFornecedor } = req.params;
         const fornecedor = new Fornecedor({ id: idFornecedor });
@@ -38,14 +35,11 @@ router.get("/:idFornecedor", async (req, res) => {
         return res.send(JSON.stringify(fornecedor));
 
     } catch (erro) {
-        res.status(404);
-       return res.send(
-            JSON.stringify({ mensagem: erro.message })
-        );
+        return next(erro);
     }
 });
 
-router.put("/:idFornecedor", async (req, res) => {
+router.put("/:idFornecedor", async (req, res,next) => {
     try {
         const { idFornecedor } = req.params;
         const dadosRecebidos = req.body;
@@ -55,14 +49,11 @@ router.put("/:idFornecedor", async (req, res) => {
         res.status(204)
         return res.send()
     } catch (erro) {
-        res.status(400);
-       return res.send(
-            JSON.stringify({ mensagem: erro.message })
-        );
+        return next(erro);
     }
 });
 
-router.delete("/:idFornecedor", async (req, res) => {
+router.delete("/:idFornecedor", async (req, res,next) => {
     try {
         const { idFornecedor } = req.params;
         const fornecedor = new Fornecedor({ id: idFornecedor });
@@ -71,10 +62,7 @@ router.delete("/:idFornecedor", async (req, res) => {
         res.status(204)
         return res.end();
     } catch (erro) {
-        res.status(404);
-        return res.send(
-            JSON.stringify({ mensagem: erro.message })
-        );
+       return next(erro);
     }
 })
 
