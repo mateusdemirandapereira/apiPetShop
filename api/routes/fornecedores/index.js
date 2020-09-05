@@ -1,12 +1,13 @@
 const router = require("express").Router();
 const TabelaFornecedor = require("./TabelaFornecedor");
 const Fornecedor = require("./Fornecedor");
-
+const SerializadorFornecedor = require("../../SerializadorFornecedor");
 router.get("/", async (req, res) => {
     const result = await TabelaFornecedor.listar();
+    const serializador = new SerializadorFornecedor(res.getHeader("Content-Type"));
     res.status(200)
     return res.send(
-        JSON.stringify(result)
+        serializador.serializar(result)
     );
 });
 
@@ -16,9 +17,10 @@ router.post("/", async (req, res,next) => {
         const dados = req.body;
         const fornecedor = new Fornecedor(dados);
         await fornecedor.criar();
+        const serializador = new SerializadorFornecedor(res.getHeader("Content-Type"));
         res.status(201)
         return res.send(
-            JSON.stringify(fornecedor)
+            serializador.serializar(fornecedor)
         );
     } catch (erro) {
         return next(erro);
@@ -31,8 +33,11 @@ router.get("/:idFornecedor", async (req, res,next) => {
         const { idFornecedor } = req.params;
         const fornecedor = new Fornecedor({ id: idFornecedor });
         await fornecedor.carregar()
+        const serializador = new SerializadorFornecedor(res.getHeader("Content-Type"),["email","dataCriacao","dataAtualizacao","versao"]);
         res.status(200);
-        return res.send(JSON.stringify(fornecedor));
+        return res.send(
+            serializador.serializar(fornecedor)
+            );
 
     } catch (erro) {
         return next(erro);
@@ -47,7 +52,7 @@ router.put("/:idFornecedor", async (req, res,next) => {
         const fornecedor = new Fornecedor(dados);
         await fornecedor.atualizar()
         res.status(204)
-        return res.send()
+        return res.end()
     } catch (erro) {
         return next(erro);
     }

@@ -4,7 +4,7 @@ class TabelaFornecedor {
 
     static async listar() {
 
-        return await Modelo.findAll();
+        return await Modelo.findAll({raw:true});
     }
     static async inserir(fornecedor) {
         return await Modelo.create(fornecedor);
